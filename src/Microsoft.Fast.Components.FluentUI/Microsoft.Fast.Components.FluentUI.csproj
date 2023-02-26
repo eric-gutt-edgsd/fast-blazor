@@ -45,7 +45,7 @@
 		<NoWarn>1701;1702;8669;1591</NoWarn>
 		<DebuggerSupport>false</DebuggerSupport>
 		<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<PackageOutputPath>$(SolutionDir)artifacts</PackageOutputPath>
 	</PropertyGroup>
 
@@ -74,6 +74,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Identity.Web" Version="2.0.8-preview" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 	</ItemGroup>
 

@@ -16,7 +16,7 @@ namespace Microsoft.Fast.Components.FluentUI.Infrastructure
             string requestBody = await GetRequestBodyAsync(requestMessage);
             string responseBody = await responseMessage.Content.ReadAsStringAsync();
 
-            await InvokeVoidAsync("put", requestMessage.RequestUri!, requestMethod, requestBody, responseBody);
+            await InvokeVoidAsync("put", requestMessage.GetRequestUri(), requestMethod, requestBody, responseBody);
         }
 
         public async ValueTask<string> PutAndGetAsync(HttpRequestMessage requestMessage, HttpResponseMessage responseMessage)
@@ -25,7 +25,7 @@ namespace Microsoft.Fast.Components.FluentUI.Infrastructure
             string requestBody = await GetRequestBodyAsync(requestMessage);
             string responseBody = await responseMessage.Content.ReadAsStringAsync();
 
-            await InvokeVoidAsync("put", requestMessage.RequestUri!, requestMethod, requestBody, responseBody);
+            await InvokeVoidAsync("put", requestMessage.GetRequestUri(), requestMethod, requestBody, responseBody);
 
             return responseBody;
         }
@@ -34,7 +34,7 @@ namespace Microsoft.Fast.Components.FluentUI.Infrastructure
         {
             string requestMethod = requestMessage.Method.Method;
             string requestBody = await GetRequestBodyAsync(requestMessage);
-            string result = await InvokeAsync<string>("get", requestMessage.RequestUri!, requestMethod, requestBody);
+            string result = await InvokeAsync<string>("get", requestMessage.GetRequestUri(), requestMethod, requestBody);
 
             return result;
         }
@@ -44,7 +44,7 @@ namespace Microsoft.Fast.Components.FluentUI.Infrastructure
             string requestMethod = requestMessage.Method.Method;
             string requestBody = await GetRequestBodyAsync(requestMessage);
 
-            await InvokeVoidAsync("remove", requestMessage.RequestUri!, requestMethod, requestBody);
+            await InvokeVoidAsync("remove", requestMessage.GetRequestUri(), requestMethod, requestBody);
         }
 
         public async ValueTask RemoveAllAsync()
@@ -62,4 +62,16 @@ namespace Microsoft.Fast.Components.FluentUI.Infrastructure
             return requestBody;
         }
     }
+
+    public static class CacheStorageAccessorExtensions
+    {
+        public static string GetRequestUri(this HttpRequestMessage msg)
+        {
+            _ = msg is null || msg.RequestUri is null ? throw new ArgumentNullException(nameof(msg)) : true;
+
+            return msg.RequestUri.IsAbsoluteUri ? msg.RequestUri!.PathAndQuery : $"{msg.RequestUri}";
+        }
+    }
+
+
 }
